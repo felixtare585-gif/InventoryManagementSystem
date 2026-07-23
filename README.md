@@ -25,53 +25,33 @@ This application allows users to manage products through a graphical user interf
 
 ## Project Structure
 
+```text
 InventoryManagementSystem
-
-src
-└── main
-    └── java
-        └── com.inventory
-            │
-            ├── controllers
-            │   └── ProductController.java
-            │
-            ├── database
-            │   └── DatabaseConnection.java
-            │
-            ├── models
-            │   └── Product.java
-            │
-            └── views
-                ├── AddProduct.java
-                ├── ViewProducts.java
-                ├── SearchProduct.java
-                ├── UpdateProduct.java
-                └── DeleteProduct.java
-
-pom.xml
-
-
-## Database
-
-Database Name:
-
-inventory_db
-
-
-Table:
-
-products
-
-
-Columns:
-
-| Column | Type |
-|---|---|
-| id | INT |
-| name | VARCHAR |
-| category | VARCHAR |
-| quantity | INT |
-| price | DOUBLE |
+│
+├── pom.xml
+│
+└── src
+    └── main
+        └── java
+            └── com.inventory
+                │
+                ├── Main.java
+                │
+                ├── controllers
+                │   └── ProductController.java
+                │
+                ├── database
+                │   └── DatabaseConnection.java
+                │
+                ├── models
+                │   └── Product.java
+                │
+                └── views
+                    ├── AddProduct.java
+                    ├── ViewProducts.java
+                    ├── SearchProduct.java
+                    ├── UpdateProduct.java
+                    └── DeleteProduct.java
 
 
 ## How To Run
