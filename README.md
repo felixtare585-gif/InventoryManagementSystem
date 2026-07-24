@@ -6,13 +6,42 @@ This application allows users to manage products through a graphical user interf
 
 ## Features
 
-- Add products
+- User Authentication & Login Screen
+- Real-time Inventory Dashboard with Key Metrics
+- Add new products
 - View all products
-- Search products
-- Update products
-- Delete products
+- Search products by ID, Name, or Category
+- Update product details
+- Delete products with confirmation dialogs
 - MySQL database integration
 - JavaFX graphical user interface
+
+---
+
+## Screenshots
+
+### 🔑 Login Screen
+![Login Screen](screenshots/01login.png)
+
+### 📊 Inventory Dashboard
+![Inventory Dashboard](screenshots/02dashboard.png)
+
+### ➕ Add Product
+![Add Product](screenshots/03addproducts.png)
+
+### 📋 View Products
+![View Products](screenshots/04view_product.png)
+
+### 🔍 Search Product
+![Search Product](screenshots/05search_product.png)
+
+### ✏️ Update Product
+![Update Product](screenshots/06update_product.png)
+
+### 🗑️ Delete Product
+![Delete Product](screenshots/07delete_product.png)
+
+---
 
 ## Technologies Used
 
@@ -27,6 +56,16 @@ This application allows users to manage products through a graphical user interf
 
 ```text
 InventoryManagementSystem
+│
+├── .github
+├── screenshots
+│   ├── 01login.png
+│   ├── 02dashboard.png
+│   ├── 03addproducts.png
+│   ├── 04view_product.png
+│   ├── 05search_product.png
+│   ├── 06update_product.png
+│   └── 07delete_product.png
 │
 ├── pom.xml
 │
@@ -53,32 +92,19 @@ InventoryManagementSystem
                     ├── UpdateProduct.java
                     └── DeleteProduct.java
 
+                    How To Run
+Clone the repository:
 
-## How To Run
+Bash
+git clone [https://github.com/felixtare585-gif/InventoryManagementSystem.git](https://github.com/felixtare585-gif/InventoryManagementSystem.git)
+Configure MySQL database connection:
+Update database credentials inside DatabaseConnection.java.
 
-1. Clone the repository:
+Open the project in VS Code or IntelliJ IDEA.
 
-git clone https://github.com/felixtare585-gif/InventoryManagementSystem.git
+Run the application:
 
-
-2. Configure MySQL database connection.
-
-3. Open the project in VS Code or IntelliJ IDEA.
-
-4. Run:
-
+Bash
 mvn javafx:run
-
-
-## Future Improvements
-
-- Login system
-- Admin and staff roles
-- Stock alerts
-- Reports generation
-- Improved dashboard design
-
-
-## Author
-
+Author
 Felix Tare
