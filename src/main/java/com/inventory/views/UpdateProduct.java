@@ -1,181 +1,196 @@
 package com.inventory.views;
 
-
 import com.inventory.controllers.ProductController;
 import com.inventory.models.Product;
 
-
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
-
 
 public class UpdateProduct {
 
-
-
     public VBox createPane() {
 
+        // Main Container setup
+        VBox mainLayout = new VBox(25);
+        mainLayout.setPadding(new Insets(30));
+        mainLayout.setAlignment(Pos.TOP_LEFT);
 
-
+        // Page Header
         Label title = new Label("Update Product");
-
-
-
-        TextField idField = new TextField();
-        idField.setPromptText("Product ID");
-
-
-
-        TextField nameField = new TextField();
-        nameField.setPromptText("New Product Name");
-
-
-
-        TextField categoryField = new TextField();
-        categoryField.setPromptText("New Category");
-
-
-
-        TextField quantityField = new TextField();
-        quantityField.setPromptText("New Quantity");
-
-
-
-        TextField priceField = new TextField();
-        priceField.setPromptText("New Price");
-
-
-
-        Button updateButton = new Button("Update Product");
-
-
-
-        updateButton.setOnAction(e -> {
-
-
-            try {
-
-
-                int id = Integer.parseInt(idField.getText());
-
-                String name = nameField.getText();
-
-                String category = categoryField.getText();
-
-                int quantity = Integer.parseInt(quantityField.getText());
-
-                double price = Double.parseDouble(priceField.getText());
-
-
-
-                Product product = new Product(
-                        id,
-                        name,
-                        category,
-                        quantity,
-                        price
-                );
-
-
-
-                boolean updated =
-                        ProductController.updateProduct(product);
-
-
-
-                Alert alert;
-
-
-
-                if(updated){
-
-
-                    alert = new Alert(
-                            Alert.AlertType.INFORMATION
-                    );
-
-                    alert.setContentText(
-                            "Product Updated Successfully!"
-                    );
-
-
-                } else {
-
-
-                    alert = new Alert(
-                            Alert.AlertType.ERROR
-                    );
-
-                    alert.setContentText(
-                            "Product ID not found!"
-                    );
-
-                }
-
-
-
-                alert.showAndWait();
-
-
-
-            }
-            catch(NumberFormatException ex){
-
-
-
-                Alert alert =
-                        new Alert(Alert.AlertType.ERROR);
-
-
-                alert.setContentText(
-                        "ID, Quantity and Price must be numbers!"
-                );
-
-
-                alert.showAndWait();
-
-            }
-
-
-        });
-
-
-
-
-
-        VBox layout = new VBox(15);
-
-
-
-        layout.getChildren().addAll(
-
-                title,
-
-                idField,
-
-                nameField,
-
-                categoryField,
-
-                quantityField,
-
-                priceField,
-
-                updateButton
-
+        title.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
+
+        // Centered Card Container for Form Controls
+        VBox cardContainer = new VBox(20);
+        cardContainer.setMaxWidth(550);
+        cardContainer.setPadding(new Insets(25));
+        cardContainer.setStyle(
+            "-fx-background-color: #ffffff; " +
+            "-fx-background-radius: 10px; " +
+            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 4);"
         );
 
+        // Form Layout Grid
+        GridPane formGrid = new GridPane();
+        formGrid.setHgap(15);
+        formGrid.setVgap(15);
 
+        // Form Fields setup
+        TextField idField = createStyledTextField("Enter ID to search");
+        TextField nameField = createStyledTextField("New Product Name");
+        TextField categoryField = createStyledTextField("New Category");
+        TextField quantityField = createStyledTextField("New Quantity");
+        TextField priceField = createStyledTextField("New Price");
 
-        layout.setAlignment(Pos.CENTER);
+        // Search/Fetch Button for ID field
+        Button fetchBtn = new Button("Fetch Details");
+        fetchBtn.setStyle(
+            "-fx-background-color: #0284c7; " +
+            "-fx-text-fill: #ffffff; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 8 14; " +
+            "-fx-background-radius: 6px; " +
+            "-fx-cursor: hand;"
+        );
 
+        // Action to load product details automatically
+        Runnable fetchAction = () -> {
+            try {
+                if (idField.getText().trim().isEmpty()) {
+                    showAlert(Alert.AlertType.WARNING, "Missing ID", "Please enter a Product ID to search!");
+                    return;
+                }
+                int id = Integer.parseInt(idField.getText().trim());
+                Product product = ProductController.searchProduct(id);
 
+                if (product != null) {
+                    nameField.setText(product.getName());
+                    categoryField.setText(product.getCategory());
+                    quantityField.setText(String.valueOf(product.getQuantity()));
+                    priceField.setText(String.valueOf(product.getPrice()));
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Not Found", "Product ID " + id + " does not exist!");
+                }
+            } catch (NumberFormatException ex) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Input", "Product ID must be a valid number!");
+            }
+        };
 
-        return layout;
+        fetchBtn.setOnAction(e -> fetchAction.run());
+        idField.setOnAction(e -> fetchAction.run()); // Press Enter in ID field to search
 
+        // Combine ID Field + Fetch Button in HBox
+        HBox idBox = new HBox(10, idField, fetchBtn);
+        HBox.setHgrow(idField, Priority.ALWAYS);
 
+        // Add Labels and Components to Grid
+        formGrid.add(createFieldLabel("Product ID:"), 0, 0);
+        formGrid.add(idBox, 1, 0);
+
+        formGrid.add(createFieldLabel("New Name:"), 0, 1);
+        formGrid.add(nameField, 1, 1);
+
+        formGrid.add(createFieldLabel("New Category:"), 0, 2);
+        formGrid.add(categoryField, 1, 2);
+
+        formGrid.add(createFieldLabel("New Quantity:"), 0, 3);
+        formGrid.add(quantityField, 1, 3);
+
+        formGrid.add(createFieldLabel("New Price (KSh):"), 0, 4);
+        formGrid.add(priceField, 1, 4);
+
+        // Update Action Button
+        Button updateButton = new Button("Update Product");
+        updateButton.setMaxWidth(Double.MAX_VALUE);
+        updateButton.setStyle(
+            "-fx-background-color: #2563eb; " +
+            "-fx-text-fill: #ffffff; " +
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 10 20; " +
+            "-fx-background-radius: 6px; " +
+            "-fx-cursor: hand;"
+        );
+
+        // Action Logic
+        updateButton.setOnAction(e -> {
+            try {
+                if (idField.getText().trim().isEmpty() ||
+                    nameField.getText().trim().isEmpty() ||
+                    categoryField.getText().trim().isEmpty() ||
+                    quantityField.getText().trim().isEmpty() ||
+                    priceField.getText().trim().isEmpty()) {
+
+                    showAlert(Alert.AlertType.WARNING, "Missing Information", "Please fill all fields!");
+                    return;
+                }
+
+                int id = Integer.parseInt(idField.getText().trim());
+                String name = nameField.getText().trim();
+                String category = categoryField.getText().trim();
+                int quantity = Integer.parseInt(quantityField.getText().trim());
+                double price = Double.parseDouble(priceField.getText().trim());
+
+                Product product = new Product(id, name, category, quantity, price);
+                boolean updated = ProductController.updateProduct(product);
+
+                if (updated) {
+                    showAlert(Alert.AlertType.INFORMATION, "Success", "Product Updated Successfully!");
+
+                    // Clear fields after success
+                    idField.clear();
+                    nameField.clear();
+                    categoryField.clear();
+                    quantityField.clear();
+                    priceField.clear();
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Not Found", "Product ID not found!");
+                }
+
+            } catch (NumberFormatException ex) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Input", "ID, Quantity and Price must be numbers!");
+            }
+        });
+
+        cardContainer.getChildren().addAll(formGrid, updateButton);
+        mainLayout.getChildren().addAll(title, cardContainer);
+
+        return mainLayout;
     }
 
+    // Helper method for field labels
+    private Label createFieldLabel(String text) {
+        Label label = new Label(text);
+        label.setStyle("-fx-font-weight: bold; -fx-text-fill: #475569; -fx-font-size: 13px;");
+        return label;
+    }
+
+    // Helper method for styled text fields
+    private TextField createStyledTextField(String placeholder) {
+        TextField tf = new TextField();
+        tf.setPromptText(placeholder);
+        tf.setPrefHeight(36);
+        tf.setPrefWidth(260);
+        tf.setStyle(
+            "-fx-background-radius: 6px; " +
+            "-fx-border-color: #cbd5e1; " +
+            "-fx-border-radius: 6px; " +
+            "-fx-padding: 5 10; " +
+            "-fx-background-color: #f8fafc;"
+        );
+        return tf;
+    }
+
+    // Helper method for Alerts
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }
