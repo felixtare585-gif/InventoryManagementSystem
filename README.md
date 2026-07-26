@@ -1,4 +1,4 @@
-# Inventory Management System
+# Inventory Management System.
 
 A desktop-based Inventory Management System built using JavaFX and MySQL.
 
