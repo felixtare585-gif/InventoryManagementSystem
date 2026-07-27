@@ -1,4 +1,4 @@
-# Inventory Management System.
+# Inventory Management System
 
 A desktop-based Inventory Management System built using JavaFX and MySQL.
 
@@ -43,7 +43,7 @@ This application allows users to manage products through a graphical user interf
 
 ---
 
-## Technologies Used
+## Technologies Used.
 
 - Java 17
 - JavaFX 21
@@ -52,7 +52,7 @@ This application allows users to manage products through a graphical user interf
 - Maven
 - Git & GitHub
 
-## Project Structure
+## Project Structure.
 
 ```text
 InventoryManagementSystem
